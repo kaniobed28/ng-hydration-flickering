@@ -25,6 +25,10 @@ Open http://localhost:4000/lab.
 
 After changing code, run `npm run build` again and restart the server.
 
+`npm start` (`ng serve`, port 4200) also works. Hot reload (HMR) is switched off in `angular.json` on purpose:
+it can keep serving old versions of components after code changes, which silently gives wrong test results.
+If results ever look wrong on 4200, stop `ng serve` and start it again.
+
 ## Test it yourself
 
 The **A/B Lab** page (link at the top of every page) lists every test. Each one has two buttons:

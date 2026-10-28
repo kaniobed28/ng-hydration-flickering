@@ -96,6 +96,59 @@ const SCENARIOS: Scenario[] = [
   },
 ];
 
+const PANEL_HELP: { title: string; items: { name: string; text: string }[] }[] = [
+  {
+    title: 'Scores (top line)',
+    items: [
+      { name: 'Variant B · server SDK', text: 'Which version you are seeing, and which way it was made.' },
+      { name: 'flickers', text: 'How many times something visibly changed on screen after the page appeared. 0 is the goal.' },
+      { name: 'CLS', text: 'How much the page jumped around (a Google score). Under 0.1 is good, above 0.1 is poor.' },
+    ],
+  },
+  {
+    title: 'Which way the test runs',
+    items: [
+      { name: 'client script', text: 'The way Kameleoon usually works: the page arrives in its original form, then a script in the browser edits it. This is the way that flickers.' },
+      { name: 'server SDK', text: 'The alternative: our server decides the version first and sends a page that is already correct. Nothing edits it afterwards.' },
+    ],
+  },
+  {
+    title: 'Which version you see',
+    items: [
+      { name: 'Variant A', text: 'The original page, as it is today (also called "control").' },
+      { name: 'Variant B', text: 'The new version we are testing. Choose B to see the changes, and the problems they cause.' },
+      { name: 'neither on', text: 'After "reset", a cookie picks A or B at random, like it does for a real visitor.' },
+    ],
+  },
+  {
+    title: 'When the A/B script makes its change (client script only)',
+    items: [
+      { name: 'early', text: 'The script is fast: it changes the page before the website wakes up. The website then often undoes the change, or breaks.' },
+      { name: 'late', text: 'The script is slow (slow network, tag manager): visitors first see the original, then it suddenly switches to the new version.' },
+      { name: 're-apply', text: 'When the website undoes a change, the script puts it back, like real A/B tools do. This causes the back-and-forth effect.' },
+      { name: 'anti-flicker', text: 'Hides the whole page until the script has made its changes. No flicker, but visitors stare at a blank page meanwhile.' },
+    ],
+  },
+  {
+    title: 'Which changes are being tested',
+    items: [
+      { name: 'E1', text: 'Home page: new headline and a red banner.' },
+      { name: 'E2', text: 'Product page: price shown 10% cheaper.' },
+      { name: 'E3', text: 'Product cards: a yellow "Free shipping" label.' },
+      { name: 'E4', text: 'Home page: "Popular products" shown in reverse order.' },
+      { name: 'E5', text: 'Header: "Free delivery over €100" instead of the cart total.' },
+      { name: 'E6', text: 'Home page: a green "Get 20% off" button replaces the red one.' },
+    ],
+  },
+  {
+    title: 'Other',
+    items: [
+      { name: 'slow device', text: 'Pretends to be a slow phone: the website wakes up 1.5 seconds later. Problems that normally last a split second become easy to see.' },
+      { name: 'reset', text: 'Puts every setting back to its starting value.' },
+    ],
+  },
+];
+
 @Component({
   selector: 'app-lab',
   template: `
@@ -152,14 +205,40 @@ const SCENARIOS: Scenario[] = [
         }
       </div>
 
-      <h2>Reading the black panel</h2>
-      <ul class="panel-help">
-        <li><strong>flickers</strong>: how many times something visibly changed after the page appeared. Server SDK should stay at 0.</li>
-        <li><strong>CLS</strong>: how much the layout jumped (Google's layout-shift score). Lower is better; above 0.1 is "poor".</li>
-        <li><span class="c-apply">Green</span>: the script changed the page. <span class="c-revert">Red</span>: Angular undid a change, or an error.
-          <span class="c-ng">Blue</span>: Angular events. The number on the left is milliseconds since the page started loading.</li>
-        <li>Click the panel title to fold it away. Use its buttons to change one thing at a time (variant, client/server, early/late, slow device…).</li>
-      </ul>
+      <h2>The black panel, explained</h2>
+      <p class="lead">
+        The black box in the bottom-right corner of every page is the control panel for these tests. A yellow
+        button is switched on. Clicking a button reloads the page with the new setting. Click the panel's title
+        to fold it away.
+      </p>
+      <p class="lead">
+        One idea helps with everything below: a page arrives in two steps. First the visitor sees it
+        (like a picture). A moment later the website <strong>"wakes up"</strong> and becomes clickable. Most
+        problems happen because the A/B tool and the waking-up website both try to control the same page.
+      </p>
+
+      <div class="glossary">
+        @for (group of panelHelp; track group.title) {
+          <section>
+            <h3>{{ group.title }}</h3>
+            <dl>
+              @for (item of group.items; track item.name) {
+                <dt><span class="chip">{{ item.name }}</span></dt>
+                <dd>{{ item.text }}</dd>
+              }
+            </dl>
+          </section>
+        }
+      </div>
+
+      <h3>The list of events</h3>
+      <p class="lead">
+        Under the buttons, the panel lists what happened while the page loaded. The number on the left is the
+        time in milliseconds (1000 ms = 1 second).
+        <span class="c-apply">Green</span>: the A/B script changed the page.
+        <span class="c-revert">Red</span>: a change was undone, or something broke.
+        <span class="c-ng">Blue</span>: the website did something (for example "Angular hydrated" means it woke up).
+      </p>
 
       <h2>Try as a real visitor</h2>
       <p>
@@ -174,6 +253,7 @@ const SCENARIOS: Scenario[] = [
 })
 export class Lab {
   protected readonly scenarios = SCENARIOS;
+  protected readonly panelHelp = PANEL_HELP;
 
   protected link(s: Scenario, mode: Mode): string {
     const params = new URLSearchParams({ ...BASE_PARAMS, ...s.params, fk_mode: mode });

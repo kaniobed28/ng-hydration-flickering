@@ -74,7 +74,31 @@
   .btn { background: #0a7d3b; }
 }
 
-.panel-help li { margin-bottom: 6px; }
+.glossary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 16px;
+
+  section {
+    padding: 16px 20px;
+    background: #fff;
+    border: 1px solid var(--border);
+  }
+
+  h3 { margin: 0 0 8px; font-size: 1rem; }
+  dl { margin: 0; }
+  dt { margin-top: 10px; }
+  dd { margin: 4px 0 0; color: #444; }
+}
+
+.chip {
+  display: inline-block;
+  padding: 1px 8px;
+  background: #222;
+  color: #ffd400;
+  font-family: ui-monospace, Consolas, monospace;
+  font-size: 0.85rem;
+}
 
 .c-apply { color: #1a7f37; font-weight: 700; }
 .c-revert { color: #cf222e; font-weight: 700; }

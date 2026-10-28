@@ -390,18 +390,23 @@
     });
 
     var controls = overlay.querySelector('.fk-controls');
+    // [label, setting, value, tooltip]
     var buttons = [
-      ['client script', 'mode', 'client'], ['server SDK', 'mode', 'server'],
-      ['Variant A', 'variant', 'A'], ['Variant B', 'variant', 'B'],
-      ['early', 'timing', 'early'], ['late', 'timing', 'late'],
-      ['re-apply', 'reapply', '1'], ['anti-flicker', 'antiflicker', '1'],
+      ['client script', 'mode', 'client', 'A script in the browser edits the page after it arrives (the way that flickers)'],
+      ['server SDK', 'mode', 'server', 'The server sends a page that is already in the right version'],
+      ['Variant A', 'variant', 'A', 'The original page'],
+      ['Variant B', 'variant', 'B', 'The new version being tested'],
+      ['early', 'timing', 'early', 'Fast script: changes the page before the website wakes up'],
+      ['late', 'timing', 'late', 'Slow script: changes the page after visitors already see the original'],
+      ['re-apply', 'reapply', '1', 'Put changes back when the website undoes them'],
+      ['anti-flicker', 'antiflicker', '1', 'Hide the page until the script is done'],
     ];
     buttons.forEach(function (b) {
       var isToggle = b[2] === '1';
       var on = isToggle ? !!num(b[1]) : (b[1] === 'variant' ? variant : String(settings[b[1]])) === b[2];
       addButton(controls, b[0], on, function () {
         settings[b[1]] = isToggle ? (on ? 0 : 1) : b[2];
-      });
+      }, b[3]);
     });
     EXPERIMENTS.forEach(function (exp) {
       var on = enabled.indexOf(exp.id) !== -1;
@@ -414,8 +419,10 @@
     });
     addButton(controls, 'slow device', !!num('slow'), function () {
       settings.slow = num('slow') ? 0 : 1500;
-    });
-    addButton(controls, 'reset', false, function () { settings = Object.assign({}, DEFAULTS); });
+    }, 'Pretend to be a slow phone: the website wakes up 1.5 s later');
+    addButton(controls, 'reset', false, function () {
+      settings = Object.assign({}, DEFAULTS);
+    }, 'Put every setting back to its starting value');
 
     render();
   }
