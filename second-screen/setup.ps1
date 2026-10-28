@@ -1,9 +1,12 @@
-# One-time setup for the iPad second screen.
+# One-time setup for the tablet second screen (iPad or Android).
 #
 #   - installs the open-source Virtual Display Driver (a fake second monitor)
-#     with resolutions that match iPads, and switches Windows to "Extend"
-#   - allows the server port through Windows Firewall on private networks
-#   - offers to mark the current Wi-Fi as Private
+#     with resolutions that match iPads and Android tablets, and switches
+#     Windows to "Extend"
+#   - lets devices on the local network (Wi-Fi or USB tethering) reach the
+#     server port through Windows Firewall
+#
+# This is the only part that needs administrator rights, and it runs once.
 #
 # Run setup.cmd (double-click), or: powershell -ExecutionPolicy Bypass -File setup.ps1
 # Remove everything again with:     setup.cmd -Uninstall
@@ -20,7 +23,7 @@ $DriverUrl    = 'https://github.com/VirtualDrivers/Virtual-Display-Driver/releas
 $DriverSha256 = 'E24210692B442B39AF763536330CE78B423F19342B7A7792C26DE3944E418B3A'
 $HardwareId   = 'Root\MttVDD'
 $SettingsDir  = 'C:\VirtualDisplayDriver'   # where the driver reads vdd_settings.xml
-$FirewallName = 'iPad second screen'
+$FirewallName = 'Tablet second screen'
 
 # --- Re-launch as administrator ------------------------------------------------
 $principal = New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())
@@ -127,7 +130,7 @@ if (Get-VirtualDisplay) {
   $inf = Get-ChildItem $work -Recurse -Filter MttVDD.inf | Select-Object -First 1
   if (-not $inf) { throw 'MttVDD.inf was not found in the download.' }
 
-  # iPad resolutions, so the extra screen is sharp and fills the iPad.
+  # Tablet resolutions, so the extra screen is sharp and fills the tablet.
   $resolutions = @(
     @(2048, 1536), # iPad (older), iPad mini 4/5, iPad Air 1-3
     @(2160, 1620), # iPad 7-9
@@ -137,7 +140,14 @@ if (Get-VirtualDisplay) {
     @(2420, 1668), # iPad Pro 11" (M4)
     @(2732, 2048), # iPad Pro 12.9", iPad Air 13"
     @(2752, 2064), # iPad Pro 13" (M4)
-    @(1366, 1024), # half-size: faster, larger text
+    @(2560, 1600), # Galaxy Tab S7-S9, Xiaomi Pad, Lenovo Tab P11 Pro
+    @(2800, 1752), # Galaxy Tab S8+/S9+
+    @(2960, 1848), # Galaxy Tab S8/S9 Ultra
+    @(2000, 1200), # Galaxy Tab A8/A9+, Lenovo Tab M10/P11
+    @(1920, 1200), # many 10" Android tablets
+    @(1280, 800),  # small or budget tablets
+    @(2400, 1080), # Android phones
+    @(1366, 1024), # half-size iPad: faster, larger text
     @(1180, 820),
     @(1920, 1080)
   )
@@ -168,31 +178,18 @@ Start-Sleep -Seconds 2
 Done 'Windows is set to "Extend these displays".'
 
 # --- 2. Firewall -----------------------------------------------------------------
-Step "Firewall (let the iPad reach this PC on port $Port)"
+# Only devices on the same local network (Wi-Fi or USB tethering) are let in,
+# on any network type, so Public networks work without changing them. The PC
+# page still asks before it shows the screen to a new device.
+Step "Firewall (let the tablet reach this PC on port $Port)"
 Get-NetFirewallRule -DisplayName $FirewallName -ErrorAction SilentlyContinue | Remove-NetFirewallRule
-New-NetFirewallRule -DisplayName $FirewallName -Direction Inbound -Protocol TCP -LocalPort $Port -Profile Private -Action Allow | Out-Null
-Done "Allowed on private networks."
-
-# --- 3. Network type -------------------------------------------------------------
-Step 'Network type'
-foreach ($p in @(Get-NetConnectionProfile | Where-Object { $_.IPv4Connectivity -ne 'Disconnected' })) {
-  if ($p.NetworkCategory -eq 'Public') {
-    $answer = Read-Host "  '$($p.Name)' is set to Public, so the iPad cannot connect. Make it Private? Only do this for your home or office network. [Y/n]"
-    if ($answer -notmatch '^[nN]') {
-      Set-NetConnectionProfile -InterfaceIndex $p.InterfaceIndex -NetworkCategory Private
-      Done "'$($p.Name)' is now Private."
-    } else {
-      Note "Left '$($p.Name)' as Public. The iPad will not be able to connect over it."
-    }
-  } else {
-    Done "'$($p.Name)' is $($p.NetworkCategory)."
-  }
-}
+New-NetFirewallRule -DisplayName $FirewallName -Direction Inbound -Protocol TCP -LocalPort $Port -RemoteAddress LocalSubnet -Profile Any -Action Allow | Out-Null
+Done 'Allowed from devices on the same local network.'
 
 # --- Next steps ------------------------------------------------------------------
 Write-Host "`nSetup finished." -ForegroundColor Green
-Write-Host '  - Optional: Settings > System > Display, click the new screen and pick the resolution of your iPad.'
-Write-Host '  - Then double-click start.cmd to use the iPad as a second screen.'
+Write-Host '  - Optional: Settings > System > Display, click the new screen and pick the resolution of your tablet.'
+Write-Host '  - Then double-click start.cmd to use the tablet as a second screen.'
 if (-not (Get-Command node -ErrorAction SilentlyContinue)) {
   Note 'Node.js is not installed. Get the LTS version from https://nodejs.org before running start.cmd.'
 }
