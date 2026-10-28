@@ -56,7 +56,7 @@ The black panel in the corner shows what happened and when:
 ### Settings in the URL
 
 Every panel setting can also be set in the URL, e.g.
-`/product/te-6-22?fk_mode=client&fk_variant=B&fk_reapply=1&fk_slow=1500`.
+`/product/rh-22?fk_mode=client&fk_variant=B&fk_reapply=1&fk_slow=1500`.
 The full list is at the top of [`public/fake-kameleoon.js`](public/fake-kameleoon.js).
 Settings are remembered for the browser tab; `reset` in the panel clears them.
 

@@ -31,7 +31,7 @@ const SCENARIOS: Scenario[] = [
   {
     id: 'E2',
     title: 'Price changes back and forth',
-    page: '/product/te-6-22',
+    page: '/product/rh-22',
     params: { fk_exp: 'E2', fk_reapply: '1', fk_slow: '1500' },
     watch: 'The big price under the product name.',
     client: '€413.10 → €459.00 → €413.10. Angular puts the original price back when it starts, then the script changes it again.',
@@ -49,7 +49,7 @@ const SCENARIOS: Scenario[] = [
   {
     id: 'E5',
     title: 'Change disappears after a click',
-    page: '/product/te-6-22',
+    page: '/product/rh-22',
     params: { fk_exp: 'E5', fk_timing: 'late', fk_delay: '300' },
     watch: 'The small text next to "Cart" in the red header.',
     steps: 'Wait 1 second, then click "Add to cart".',
@@ -72,7 +72,7 @@ const SCENARIOS: Scenario[] = [
     page: '/',
     params: { fk_exp: 'E2', fk_nav_delay: '1000' },
     watch: 'The price on the product page you open.',
-    steps: 'Scroll to "Popular products" and click "TE 6-22 Cordless Rotary Hammer".',
+    steps: 'Scroll to "Popular products" and click "RH 22 Cordless Rotary Hammer".',
     client: '€459.00 for 1 s, then €413.10.',
     server: '€413.10 straight away.',
   },

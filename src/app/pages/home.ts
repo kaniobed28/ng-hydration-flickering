@@ -14,7 +14,7 @@ import { FEATURES } from '../ab/features';
     <section class="hero" id="home-hero" [class.hero--variant]="ab.isOn(features.heroHeadline)">
       <div class="container hero__inner">
         <div>
-          <p class="eyebrow">Nuron cordless platform</p>
+          <p class="eyebrow">ProVolt cordless platform</p>
           <h1 class="hero__title">
             {{ ab.isOn(features.heroHeadline) ? 'Power through every job. 30% faster drilling.' : 'One battery. Every tool. Every job.' }}
           </h1>

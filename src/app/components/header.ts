@@ -18,7 +18,7 @@ import { FEATURES } from '../ab/features';
     </div>
     <header class="header">
       <div class="container header__inner">
-        <a routerLink="/" class="logo" aria-label="Home">HILTI</a>
+        <a routerLink="/" class="logo" aria-label="Home">TOOL STORE</a>
         <form class="search" (submit)="$event.preventDefault()">
           <input type="search" placeholder="Search products, articles, services" aria-label="Search" />
           <button type="submit" class="btn btn--primary">Search</button>

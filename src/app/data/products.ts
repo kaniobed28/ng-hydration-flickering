@@ -28,8 +28,8 @@ export const CATEGORIES: Category[] = [
 
 export const PRODUCTS: Product[] = [
   {
-    id: 'te-6-22',
-    name: 'TE 6-22 Cordless Rotary Hammer',
+    id: 'rh-22',
+    name: 'RH 22 Cordless Rotary Hammer',
     category: 'drilling',
     price: 459,
     rating: 4.8,
@@ -39,8 +39,8 @@ export const PRODUCTS: Product[] = [
     specs: { Voltage: '22 V', 'Impact energy': '2.5 J', Weight: '2.6 kg', 'Drilling range': '6–22 mm' },
   },
   {
-    id: 'te-30-a36',
-    name: 'TE 30-A36 Combihammer',
+    id: 'ch-36',
+    name: 'CH 36 Cordless Combihammer',
     category: 'drilling',
     price: 829,
     rating: 4.7,
@@ -49,8 +49,8 @@ export const PRODUCTS: Product[] = [
     specs: { Voltage: '36 V', 'Impact energy': '3.6 J', Weight: '5.4 kg', 'Drilling range': '10–28 mm' },
   },
   {
-    id: 'te-500',
-    name: 'TE 500 Demolition Hammer',
+    id: 'dh-7',
+    name: 'DH 7 Demolition Hammer',
     category: 'drilling',
     price: 699,
     rating: 4.6,
@@ -59,8 +59,8 @@ export const PRODUCTS: Product[] = [
     specs: { Power: '1300 W', 'Impact energy': '7.5 J', Weight: '5.8 kg' },
   },
   {
-    id: 'ag-125',
-    name: 'AG 125-A22 Angle Grinder',
+    id: 'cg-125',
+    name: 'CG 125 Cordless Angle Grinder',
     category: 'cutting',
     price: 319,
     rating: 4.7,
@@ -70,8 +70,8 @@ export const PRODUCTS: Product[] = [
     specs: { Voltage: '22 V', 'Disc diameter': '125 mm', 'No-load speed': '8500 rpm', Weight: '2.4 kg' },
   },
   {
-    id: 'sc-30',
-    name: 'SC 30WL Circular Saw',
+    id: 'cs-190',
+    name: 'CS 190 Cordless Circular Saw',
     category: 'cutting',
     price: 389,
     rating: 4.5,
@@ -80,8 +80,8 @@ export const PRODUCTS: Product[] = [
     specs: { Voltage: '22 V', 'Cutting depth': '70 mm', 'Blade diameter': '190 mm' },
   },
   {
-    id: 'hit-hy-200',
-    name: 'HIT-HY 200 Injectable Mortar',
+    id: 'fm-200',
+    name: 'FixMix 200 Injectable Mortar',
     category: 'anchoring',
     price: 39,
     rating: 4.9,
@@ -90,8 +90,8 @@ export const PRODUCTS: Product[] = [
     specs: { Volume: '500 ml', 'Base material': 'Concrete', 'Working time': '6 min @ 20°C' },
   },
   {
-    id: 'hst3',
-    name: 'HST3 Wedge Anchor (box of 50)',
+    id: 'wa-10',
+    name: 'WA 10 Wedge Anchor (box of 50)',
     category: 'anchoring',
     price: 64,
     rating: 4.8,
@@ -100,8 +100,8 @@ export const PRODUCTS: Product[] = [
     specs: { Size: 'M10 x 90', Material: 'Carbon steel, zinc plated', Quantity: '50 pcs' },
   },
   {
-    id: 'pd-c',
-    name: 'PD-C Laser Range Meter',
+    id: 'lm-100',
+    name: 'LM 100 Laser Range Meter',
     category: 'measuring',
     price: 249,
     rating: 4.6,
@@ -110,8 +110,8 @@ export const PRODUCTS: Product[] = [
     specs: { Range: '0.05–100 m', Accuracy: '±1 mm', 'Protection class': 'IP54' },
   },
   {
-    id: 'pm-30',
-    name: 'PM 30-MG Multi-Line Laser',
+    id: 'll-3g',
+    name: 'LL 3G Multi-Line Laser',
     category: 'measuring',
     price: 579,
     rating: 4.7,
@@ -121,8 +121,8 @@ export const PRODUCTS: Product[] = [
     specs: { 'Laser colour': 'Green', Lines: '3 x 360°', Range: '30 m (80 m w/ receiver)' },
   },
   {
-    id: 'b22-85',
-    name: 'B 22-85 Battery 8.0 Ah',
+    id: 'bp-22-8',
+    name: 'BP 22 Battery 8.0 Ah',
     category: 'batteries',
     price: 189,
     rating: 4.8,
@@ -131,8 +131,8 @@ export const PRODUCTS: Product[] = [
     specs: { Voltage: '22 V', Capacity: '8.0 Ah', Weight: '0.9 kg' },
   },
   {
-    id: 'c4-36',
-    name: 'C 4/36-350 Fast Charger',
+    id: 'fc-36',
+    name: 'FC 36 Fast Charger',
     category: 'batteries',
     price: 129,
     rating: 4.6,
