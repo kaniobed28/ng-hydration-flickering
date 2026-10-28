@@ -101,7 +101,7 @@ const server = http.createServer((req, res) => {
 server.listen(PORT, '0.0.0.0', () => {
   const lan = lanAddresses();
   console.log('\niPad second screen is running.\n');
-  console.log(`  On this PC (Chrome or Edge):  http://localhost:${PORT}   -> tap Share, pick the virtual display`);
+  console.log(`  On this PC (Chrome or Edge):  http://localhost:${PORT}   -> click "Send extra screen to iPad", pick the virtual display (Screen 2)`);
   if (lan.length) {
     for (const a of lan) console.log(`  On the iPad (Safari):         ${a}`);
   } else {
@@ -223,7 +223,7 @@ async function onMsg(m) {
 }
 
 if (role === 'sender') {
-  btn.textContent = 'Share';
+  btn.textContent = 'Send extra screen to iPad';
   hint.textContent = ADDRESSES.length
     ? 'On the iPad, open ' + ADDRESSES.join(' or ') + ' in Safari and tap Connect.'
     : 'No network address found. Connect this PC to the Wi-Fi.';
@@ -243,12 +243,12 @@ if (role === 'sender') {
       stream = null;
       if (pc) { pc.close(); pc = null; }
       v.srcObject = null;
-      btn.textContent = 'Share';
+      btn.textContent = 'Send extra screen to iPad';
       post({ type: 'bye' });
       setStatus('Stopped sharing.');
     };
     v.srcObject = stream;
-    btn.textContent = 'Share a different screen';
+    btn.textContent = 'Pick a different screen';
     if (peerHere) await offer();
     else setStatus('Sharing. Waiting for the iPad to connect…');
   };

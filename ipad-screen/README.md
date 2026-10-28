@@ -9,7 +9,7 @@ Install a virtual display driver (for example the open-source [Virtual Display D
 ## Use
 
 1. On the PC, run `node server.js`. It prints a PC address and an iPad address.
-2. On the PC, open `http://localhost:8080` in Chrome or Edge, click **Share**, and pick the virtual display.
+2. On the PC, open `http://localhost:8080` in Chrome or Edge, click **Send extra screen to iPad**, and pick the virtual display (usually "Screen 2", not your main screen). The iPad then becomes an extended desktop: drag windows onto it like any second monitor.
 3. On the iPad, open the printed `http://192.168…:8080` address in Safari and tap **Connect**. Tap the video to make it full screen.
 
 To use a different port, set `PORT` (for example `PORT=9000 node server.js`).
