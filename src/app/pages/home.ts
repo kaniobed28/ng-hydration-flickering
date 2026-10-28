@@ -1,21 +1,30 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { CATEGORIES, PRODUCTS } from '../data/products';
 import { ProductCard } from '../components/product-card';
 import { ProductImage } from '../components/product-image';
+import { AbService } from '../ab/ab.service';
+import { FEATURES } from '../ab/features';
 
 @Component({
   selector: 'app-home',
   imports: [RouterLink, ProductCard, ProductImage],
   template: `
     <!-- Hero: a good first A/B test target (headline, CTA text/colour) -->
-    <section class="hero" id="home-hero">
+    <section class="hero" id="home-hero" [class.hero--variant]="ab.isOn(features.heroHeadline)">
       <div class="container hero__inner">
         <div>
           <p class="eyebrow">Nuron cordless platform</p>
-          <h1 class="hero__title">One battery. Every tool. Every job.</h1>
+          <h1 class="hero__title">
+            {{ ab.isOn(features.heroHeadline) ? 'Power through every job. 30% faster drilling.' : 'One battery. Every tool. Every job.' }}
+          </h1>
           <p class="hero__text">Switch your whole fleet to a single 22 V platform and cut downtime on site.</p>
-          <a routerLink="/products/drilling" class="btn btn--primary btn--lg" id="hero-cta">Shop cordless tools</a>
+          <a
+            routerLink="/products/drilling"
+            class="btn btn--primary btn--lg"
+            [class.fk-cta]="ab.isOn(features.heroCta)"
+            id="hero-cta"
+          >{{ ab.isOn(features.heroCta) ? 'Get 20% off cordless →' : 'Shop cordless tools' }}</a>
         </div>
         <app-product-image category="drilling" class="hero__img" />
       </div>
@@ -55,6 +64,13 @@ import { ProductImage } from '../components/product-image';
   styleUrl: './home.scss',
 })
 export class Home {
+  protected readonly ab = inject(AbService);
+  protected readonly features = FEATURES;
   protected readonly categories = CATEGORIES;
-  protected readonly popular = [...PRODUCTS].sort((a, b) => b.reviews - a.reviews).slice(0, 4);
+  protected readonly popular = this.mostReviewed();
+
+  private mostReviewed() {
+    const products = [...PRODUCTS].sort((a, b) => b.reviews - a.reviews).slice(0, 4);
+    return this.ab.isOn(FEATURES.popularOrder) ? products.reverse() : products;
+  }
 }

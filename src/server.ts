@@ -4,13 +4,50 @@ import {
   isMainModule,
   writeResponseToNodeResponse,
 } from '@angular/ssr/node';
-import express from 'express';
+import express, { Request, Response } from 'express';
 import { join } from 'node:path';
+import { FakeKameleoonClient, readCookie } from './ab/fake-kameleoon-sdk';
+import { AbContext, DEFAULT_EXPERIMENTS, EXPERIMENT_FEATURES } from './app/ab/features';
 
 const browserDistFolder = join(import.meta.dirname, '../browser');
 
 const app = express();
 const angularApp = new AngularNodeAppEngine();
+
+// One SDK client per server instance, as Kameleoon recommends.
+const abClient = new FakeKameleoonClient({ siteCode: 'demo' });
+const abReady = abClient.initialize();
+
+/**
+ * Demo settings shared with public/fake-kameleoon.js: a `fk_*` query param wins and is
+ * saved as a cookie, otherwise the cookie the client script's panel wrote is used.
+ */
+function demoSetting(req: Request, res: Response, name: string): string | undefined {
+  const fromQuery = req.query[name];
+  if (typeof fromQuery === 'string') {
+    res.cookie(name, fromQuery, { path: '/', sameSite: 'lax' });
+    return fromQuery;
+  }
+  return readCookie(req, name);
+}
+
+/** Server mode: the SDK picks each experiment's variant before Angular renders. */
+function resolveAb(req: Request, res: Response): AbContext {
+  if (demoSetting(req, res, 'fk_mode') !== 'server') return { mode: 'client', variations: {} };
+
+  const visitorCode = abClient.getVisitorCode({ request: req, response: res });
+  const forced = demoSetting(req, res, 'fk_variant');
+  const experiments = (demoSetting(req, res, 'fk_exp') || DEFAULT_EXPERIMENTS).split(',');
+
+  const variations: AbContext['variations'] = {};
+  for (const id of experiments) {
+    const featureKey = EXPERIMENT_FEATURES[id];
+    if (!featureKey) continue;
+    variations[featureKey] =
+      forced === 'A' ? 'off' : forced === 'B' ? 'on' : abClient.getVariation({ visitorCode, featureKey }).key;
+  }
+  return { mode: 'server', variations };
+}
 
 /**
  * Example Express Rest API endpoints can be defined here.
@@ -32,6 +69,10 @@ app.use(
     maxAge: '1y',
     index: false,
     redirect: false,
+    // The A/B script isn't content-hashed, so make browsers revalidate it.
+    setHeaders: (res, path) => {
+      if (path.endsWith('fake-kameleoon.js')) res.setHeader('Cache-Control', 'no-cache');
+    },
   }),
 );
 
@@ -39,8 +80,8 @@ app.use(
  * Handle all other requests by rendering the Angular application.
  */
 app.use((req, res, next) => {
-  angularApp
-    .handle(req)
+  abReady
+    .then(() => angularApp.handle(req, resolveAb(req, res)))
     .then((response) =>
       response ? writeResponseToNodeResponse(response, res) : next(),
     )

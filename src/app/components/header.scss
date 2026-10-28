@@ -10,6 +10,12 @@
   padding-block: 6px;
 }
 
+.topbar__lab {
+  color: #ffd400;
+  font-weight: 700;
+  text-decoration: none;
+}
+
 .header {
   background: var(--red);
   color: #fff;
@@ -97,7 +103,6 @@
 }
 
 @media (max-width: 720px) {
-  .topbar__inner span:last-child { display: none; }
   .header__inner { flex-wrap: wrap; gap: 12px; }
   .search { order: 3; flex-basis: 100%; }
   .header__actions { margin-left: auto; }

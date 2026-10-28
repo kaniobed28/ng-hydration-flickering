@@ -4,6 +4,8 @@ import { RouterLink } from '@angular/router';
 import { Product } from '../data/products';
 import { CartService } from '../data/cart.service';
 import { ProductImage } from './product-image';
+import { AbService } from '../ab/ab.service';
+import { FEATURES } from '../ab/features';
 
 @Component({
   selector: 'app-product-card',
@@ -11,6 +13,9 @@ import { ProductImage } from './product-image';
   template: `
     <article class="card" [attr.data-product-id]="product().id">
       <a [routerLink]="['/product', product().id]" class="card__link">
+        @if (ab.isOn(features.cardBadge)) {
+          <span class="fk-badge">Free shipping</span>
+        }
         @if (product().badge) {
           <span class="badge">{{ product().badge }}</span>
         }
@@ -29,4 +34,6 @@ import { ProductImage } from './product-image';
 export class ProductCard {
   readonly product = input.required<Product>();
   protected readonly cart = inject(CartService);
+  protected readonly ab = inject(AbService);
+  protected readonly features = FEATURES;
 }

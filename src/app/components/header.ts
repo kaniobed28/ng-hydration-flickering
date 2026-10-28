@@ -3,6 +3,8 @@ import { CurrencyPipe } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { CATEGORIES } from '../data/products';
 import { CartService } from '../data/cart.service';
+import { AbService } from '../ab/ab.service';
+import { FEATURES } from '../ab/features';
 
 @Component({
   selector: 'app-header',
@@ -11,7 +13,7 @@ import { CartService } from '../data/cart.service';
     <div class="topbar">
       <div class="container topbar__inner">
         <span>Free delivery on orders over €100</span>
-        <span>Customer service: +00 000 000 000</span>
+        <a routerLink="/lab" class="topbar__lab">A/B Lab →</a>
       </div>
     </div>
     <header class="header">
@@ -25,7 +27,7 @@ import { CartService } from '../data/cart.service';
           <a href="#" (click)="$event.preventDefault()">Sign in</a>
           <a routerLink="/cart" class="cart" id="header-cart">
             Cart <span class="cart__count">{{ cart.count() }}</span>
-            <small>{{ cart.total() | currency: 'EUR' }}</small>
+            <small>{{ ab.isOn(features.cartMessage) ? 'Free delivery over €100' : (cart.total() | currency: 'EUR') }}</small>
           </a>
         </div>
       </div>
@@ -44,4 +46,6 @@ import { CartService } from '../data/cart.service';
 export class Header {
   protected readonly cart = inject(CartService);
   protected readonly categories = CATEGORIES;
+  protected readonly ab = inject(AbService);
+  protected readonly features = FEATURES;
 }

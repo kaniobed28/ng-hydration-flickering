@@ -11,6 +11,10 @@
   padding-block: 56px;
 }
 
+// Variant B styles, rendered by Angular in server (SDK) mode.
+.hero--variant { background: linear-gradient(110deg, #7a0010 55%, #d2051e); }
+.fk-cta { background: #0a7d3b; }
+
 .eyebrow {
   margin: 0;
   color: var(--red-light);
