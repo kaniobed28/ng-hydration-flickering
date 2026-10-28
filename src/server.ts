@@ -12,7 +12,11 @@ import { AbContext, DEFAULT_EXPERIMENTS, EXPERIMENT_FEATURES } from './app/ab/fe
 const browserDistFolder = join(import.meta.dirname, '../browser');
 
 const app = express();
-const angularApp = new AngularNodeAppEngine();
+// On Vercel every request comes through its proxy, which adds these headers. Untrusted
+// x-forwarded-* headers make Angular skip SSR and serve an empty client-rendered page.
+const angularApp = new AngularNodeAppEngine({
+  trustProxyHeaders: ['x-forwarded-for', 'x-forwarded-host', 'x-forwarded-proto', 'x-forwarded-port'],
+});
 
 // One SDK client per server instance, as Kameleoon recommends.
 const abClient = new FakeKameleoonClient({ siteCode: 'demo' });
