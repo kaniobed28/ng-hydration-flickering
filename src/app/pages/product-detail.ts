@@ -22,7 +22,7 @@ import { FEATURES } from '../ab/features';
             <h1>{{ p.name }}</h1>
             <p class="rating">★ {{ p.rating }} · {{ p.reviews }} reviews</p>
             <p>{{ p.summary }}</p>
-            <p class="price" id="pdp-price">{{ price() | currency: 'EUR' }}{{ discount ? ' (−10% today)' : '' }} <small>excl. VAT</small></p>
+            <p class="price" id="pdp-price">{{ price() | currency: 'EUR' }}{{ discount() ? ' (−10% today)' : '' }} <small>excl. VAT</small></p>
             <button class="btn btn--primary btn--lg" id="pdp-add-to-cart" (click)="cart.add(p)">Add to cart</button>
             <h2>Technical data</h2>
             <table class="specs">
@@ -59,7 +59,8 @@ export class ProductDetail {
   protected readonly cart = inject(CartService);
   protected readonly product = computed(() => PRODUCTS.find((p) => p.id === this.id()));
   protected readonly categoryName = computed(() => CATEGORIES.find((c) => c.id === this.product()?.category)?.name);
-  protected readonly discount = inject(AbService).isOn(FEATURES.pdpDiscount);
-  protected readonly price = computed(() => (this.product()?.price ?? 0) * (this.discount ? 0.9 : 1));
+  private readonly ab = inject(AbService);
+  protected readonly discount = computed(() => this.ab.isOn(FEATURES.pdpDiscount));
+  protected readonly price = computed(() => (this.product()?.price ?? 0) * (this.discount() ? 0.9 : 1));
   protected readonly keepOrder = () => 0;
 }

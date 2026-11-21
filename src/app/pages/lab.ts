@@ -8,6 +8,8 @@ interface Scenario {
   page: string;
   /** Overrides for this scenario; every other fk_ setting is reset to its default. */
   params: Record<string, string>;
+  /** Mode used by the left-hand button (default: client script). */
+  clientMode?: string;
   watch: string;
   steps?: string;
   client: string;
@@ -17,6 +19,8 @@ interface Scenario {
 const BASE_PARAMS: Record<string, string> = {
   fk_variant: 'B',
   fk_timing: 'early',
+  fk_sdk_delay: '200',
+  fk_skiphydration: '0',
   fk_delay: '1000',
   fk_reapply: '0',
   fk_reapply_delay: '300',
@@ -95,6 +99,25 @@ const SCENARIOS: Scenario[] = [
     server: '€413.10 the whole time.',
   },
   {
+    id: 'Skip hydration',
+    title: 'Rebuilding the section instead of waking it up',
+    page: '/',
+    params: { fk_exp: 'E3,E4', fk_skiphydration: '1' },
+    watch: '"Popular products", and the red lines in the panel. Compare with the E3+E4 test.',
+    client: 'No crash and no duplicate card, but the badges and new order are gone: Angular rebuilds the section and throws the script\'s changes away. With re-apply on, they come back a moment later (flicker).',
+    server: '4 cards in reverse order, each with a badge, no errors.',
+  },
+  {
+    id: 'Browser SDK',
+    title: 'SDK in the browser instead of on the server',
+    page: '/product/rh-22',
+    clientMode: 'browser',
+    params: { fk_exp: 'E2', fk_slow: '1500' },
+    watch: 'The big price. The left-hand button runs the browser SDK here, not the client script.',
+    client: 'No errors and nothing undone, but €459.00 until the website has woken up and the SDK has answered, then €413.10. Same flicker as "Stable": choosing in the browser does not remove it.',
+    server: '€413.10 the whole time: only choosing on the server removes the flicker.',
+  },
+  {
     id: 'Anti-flicker',
     title: 'Hiding the page until the script is ready',
     page: '/',
@@ -119,6 +142,7 @@ const PANEL_HELP: { title: string; items: { name: string; text: string }[] }[] =
     items: [
       { name: 'client script', text: 'The way Kameleoon usually works: the page arrives in its original form, then a script in the browser edits it. This is the way that flickers.' },
       { name: 'server SDK', text: 'The alternative: our server decides the version first and sends a page that is already correct. Nothing edits it afterwards.' },
+      { name: 'browser SDK', text: 'The website picks the version itself, but in the browser, once it has woken up. No script edits the page, but visitors still see the original first.' },
     ],
   },
   {
@@ -137,6 +161,7 @@ const PANEL_HELP: { title: string; items: { name: string; text: string }[] }[] =
       { name: 'stable', text: 'The script waits until the website has fully woken up, then makes its change. Nothing breaks, but visitors see the original for the whole wake-up time. The slower the device, the longer the flicker.' },
       { name: 're-apply', text: 'When the website undoes a change, the script puts it back, like real A/B tools do. This causes the back-and-forth effect.' },
       { name: 'anti-flicker', text: 'Hides the whole page until the script has made its changes. No flicker, but visitors stare at a blank page meanwhile.' },
+      { name: 'skip hydration', text: '"Popular products" is rebuilt from scratch in the browser instead of being woken up (Angular\'s ngSkipHydration). Stops the crash, but throws away the script\'s changes.' },
     ],
   },
   {
@@ -266,7 +291,8 @@ export class Lab {
   protected readonly panelHelp = PANEL_HELP;
 
   protected link(s: Scenario, mode: Mode): string {
-    const params = new URLSearchParams({ ...BASE_PARAMS, ...s.params, fk_mode: mode });
+    const fkMode = mode === 'client' && s.clientMode ? s.clientMode : mode;
+    const params = new URLSearchParams({ ...BASE_PARAMS, ...s.params, fk_mode: fkMode });
     return `${s.page}?${params}`;
   }
 

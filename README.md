@@ -44,6 +44,8 @@ Run both and compare.
 | E7 Navigation | The original version shows briefly on every page change |
 | E3+E4 Badges/order | Angular crashes while starting, a product shows twice |
 | Stable | No errors, but the original shows until Angular has hydrated, then jumps |
+| Skip hydration | No crash, but Angular rebuilds the section and the script's changes are lost |
+| Browser SDK | No errors, but the original shows until Angular has hydrated and the SDK has answered |
 | Anti-flicker | No flicker, but a blank page while waiting |
 
 The black panel in the corner shows what happened and when:

@@ -28,6 +28,15 @@ export const DEFAULT_EXPERIMENTS = 'E1,E2,E5,E6';
  * server: the SDK chose the variant on the server and Angular renders it.
  */
 export interface AbContext {
-  mode: 'client' | 'server';
+  mode: 'client' | 'server' | 'browser';
   variations: Partial<Record<FeatureKey, string>>;
+  /** Render "Popular products" with ngSkipHydration (configuration C). */
+  skipHydration?: boolean;
+}
+
+/** Same bucketing as the client script and the fake server SDK. */
+export function bucket(visitorCode: string): 'A' | 'B' {
+  let hash = 0;
+  for (let i = 0; i < visitorCode.length; i++) hash = (hash * 31 + visitorCode.charCodeAt(i)) | 0;
+  return Math.abs(hash) % 2 ? 'B' : 'A';
 }

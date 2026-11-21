@@ -37,7 +37,11 @@ function demoSetting(req: Request, res: Response, name: string): string | undefi
 
 /** Server mode: the SDK picks each experiment's variant before Angular renders. */
 function resolveAb(req: Request, res: Response): AbContext {
-  if (demoSetting(req, res, 'fk_mode') !== 'server') return { mode: 'client', variations: {} };
+  const skipHydration = demoSetting(req, res, 'fk_skiphydration') === '1';
+  const mode = demoSetting(req, res, 'fk_mode');
+  // browser mode: the server renders control; the SDK decides in the browser (AbService).
+  if (mode === 'browser') return { mode: 'browser', variations: {}, skipHydration };
+  if (mode !== 'server') return { mode: 'client', variations: {}, skipHydration };
 
   const visitorCode = abClient.getVisitorCode({ request: req, response: res });
   const forced = demoSetting(req, res, 'fk_variant');
@@ -50,7 +54,7 @@ function resolveAb(req: Request, res: Response): AbContext {
     variations[featureKey] =
       forced === 'A' ? 'off' : forced === 'B' ? 'on' : abClient.getVariation({ visitorCode, featureKey }).key;
   }
-  return { mode: 'server', variations };
+  return { mode: 'server', variations, skipHydration };
 }
 
 /**

@@ -1,14 +1,14 @@
 import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { CATEGORIES, PRODUCTS } from '../data/products';
-import { ProductCard } from '../components/product-card';
+import { CATEGORIES } from '../data/products';
+import { PopularProducts } from '../components/popular-products';
 import { ProductImage } from '../components/product-image';
 import { AbService } from '../ab/ab.service';
 import { FEATURES } from '../ab/features';
 
 @Component({
   selector: 'app-home',
-  imports: [RouterLink, ProductCard, ProductImage],
+  imports: [RouterLink, PopularProducts, ProductImage],
   template: `
     <!-- Hero: a good first A/B test target (headline, CTA text/colour) -->
     <section class="hero" id="home-hero" [class.hero--variant]="ab.isOn(features.heroHeadline)">
@@ -43,17 +43,12 @@ import { FEATURES } from '../ab/features';
       </div>
     </section>
 
-    <section class="container section">
-      <div class="section__head">
-        <h2>Popular products</h2>
-        <a routerLink="/products">See all</a>
-      </div>
-      <div class="grid">
-        @for (p of popular; track p.id) {
-          <app-product-card [product]="p" />
-        }
-      </div>
-    </section>
+    <!-- ngSkipHydration must be a static attribute, so configuration C picks a branch. -->
+    @if (ab.skipHydration) {
+      <app-popular-products ngSkipHydration />
+    } @else {
+      <app-popular-products />
+    }
 
     <section class="container section usp" id="usp-bar">
       <div><strong>Lifetime service</strong><span>Repairs and wear-part replacement included.</span></div>
@@ -67,10 +62,4 @@ export class Home {
   protected readonly ab = inject(AbService);
   protected readonly features = FEATURES;
   protected readonly categories = CATEGORIES;
-  protected readonly popular = this.mostReviewed();
-
-  private mostReviewed() {
-    const products = [...PRODUCTS].sort((a, b) => b.reviews - a.reviews).slice(0, 4);
-    return this.ab.isOn(FEATURES.popularOrder) ? products.reverse() : products;
-  }
 }

@@ -6,9 +6,14 @@
  * cookie, and edits the server-rendered DOM directly through CSS selectors.
  *
  * Switches (URL params, remembered for the tab in sessionStorage):
- *   fk_mode=client|server   client: this script edits the page (the flicker-prone setup)
+ *   fk_mode=client|server|browser
+ *                           client: this script edits the page (the flicker-prone setup)
  *                           server: the SDK in server.ts picks the variant and Angular renders
  *                           it; this script changes nothing and only reports later changes
+ *                           browser: an SDK in the browser (AbService) picks the variant after
+ *                           hydration and Angular re-renders it; this script only reports
+ *   fk_sdk_delay=200        browser mode: time the browser SDK takes to initialize
+ *   fk_skiphydration=0|1    render "Popular products" with ngSkipHydration (home page)
  *   fk_variant=A|B          force a variant (default: bucketed from the fk_visitor cookie)
  *   fk_timing=early|late|stable
  *                           early: edit the HTML before Angular hydrates
@@ -34,6 +39,8 @@
     mode: 'client',
     variant: '',
     timing: 'early',
+    sdk_delay: 200,
+    skiphydration: 0,
     delay: 1000,
     reapply: 0,
     reapply_delay: 300,
@@ -46,7 +53,8 @@
   };
 
   var settings = loadSettings();
-  var serverMode = settings.mode === 'server';
+  // In server and browser mode Angular renders the variant; this script only watches.
+  var serverMode = settings.mode === 'server' || settings.mode === 'browser';
   var variant = getVariant();
   var enabled = String(settings.exp).split(',');
   var state = {};
@@ -403,6 +411,7 @@
     var buttons = [
       ['client script', 'mode', 'client', 'A script in the browser edits the page after it arrives (the way that flickers)'],
       ['server SDK', 'mode', 'server', 'The server sends a page that is already in the right version'],
+      ['browser SDK', 'mode', 'browser', 'The website itself picks the version in the browser, after it wakes up'],
       ['Variant A', 'variant', 'A', 'The original page'],
       ['Variant B', 'variant', 'B', 'The new version being tested'],
       ['early', 'timing', 'early', 'Fast script: changes the page before the website wakes up'],
@@ -410,6 +419,7 @@
       ['stable', 'timing', 'stable', 'Waits until the website has fully woken up (hydrated), then changes the page'],
       ['re-apply', 'reapply', '1', 'Put changes back when the website undoes them'],
       ['anti-flicker', 'antiflicker', '1', 'Hide the page until the script is done'],
+      ['skip hydration', 'skiphydration', '1', '"Popular products" is rebuilt in the browser instead of woken up (ngSkipHydration)'],
     ];
     buttons.forEach(function (b) {
       var isToggle = b[2] === '1';
@@ -460,7 +470,8 @@
   function render() {
     if (!overlay) return;
     overlay.querySelector('.fk-variant').textContent =
-      'Variant ' + variant + ' · ' + (serverMode ? 'server SDK' : 'client ' + settings.timing);
+      'Variant ' + variant + ' · ' + (settings.mode === 'server' ? 'server SDK' : settings.mode === 'browser' ? 'browser SDK' : 'client ' + settings.timing) +
+      (num('skiphydration') ? ' · skip hydration' : '');
     overlay.querySelector('.fk-stat').textContent = 'flickers ' + flickers + ' · CLS ' + cls.toFixed(3);
     overlay.querySelector('.fk-log').innerHTML = entries.map(function (e) {
       return '<li class="fk-' + e.kind + '"><span class="t">' + String(e.t).padStart(5) + ' ms</span>  ' +
@@ -492,7 +503,7 @@
 
   // server.ts reads these to decide, before rendering, what the SDK should do.
   function syncCookies(values) {
-    ['mode', 'variant', 'exp'].forEach(function (key) {
+    ['mode', 'variant', 'exp', 'skiphydration'].forEach(function (key) {
       document.cookie = 'fk_' + key + '=' + encodeURIComponent(values[key]) + '; path=/; SameSite=Lax';
     });
   }
