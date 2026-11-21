@@ -45,9 +45,9 @@ class MainActivity : Activity() {
         // Real tool: GrowthBook JS SDK from cdn.jsdelivr.net, visitor ID in localStorage/cookie.
         Target("GrowthBook (client)", "/growthbook.html", "gb"),
         // Fake Kameleoon script edits the headline in the browser (forced variant B).
-        Target("Store: client script", "/?fk_mode=client&fk_variant=B", "store"),
+        Target("Store: client script", "/home?fk_mode=client&fk_variant=B", "store"),
         // Same experiment, but the server picks variant B and renders it. Nothing to block.
-        Target("Store: server SDK", "/?fk_mode=server&fk_variant=B", "store"),
+        Target("Store: server SDK", "/home?fk_mode=server&fk_variant=B", "store"),
     )
 
     /** Requests the "Block A/B scripts" toggle refuses. */
