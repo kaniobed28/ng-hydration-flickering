@@ -86,6 +86,15 @@ const SCENARIOS: Scenario[] = [
     server: '4 cards in reverse order, each with a badge, no errors.',
   },
   {
+    id: 'Stable',
+    title: 'Waiting until the website is ready',
+    page: '/product/rh-22',
+    params: { fk_exp: 'E2', fk_timing: 'stable', fk_slow: '1500' },
+    watch: 'The big price under the product name, and the "stable" line in the panel.',
+    client: 'No errors and nothing undone, but €459.00 stays on screen until the website has woken up (about 1.5 s here), then jumps to €413.10.',
+    server: '€413.10 the whole time.',
+  },
+  {
     id: 'Anti-flicker',
     title: 'Hiding the page until the script is ready',
     page: '/',
@@ -125,6 +134,7 @@ const PANEL_HELP: { title: string; items: { name: string; text: string }[] }[] =
     items: [
       { name: 'early', text: 'The script is fast: it changes the page before the website wakes up. The website then often undoes the change, or breaks.' },
       { name: 'late', text: 'The script is slow (slow network, tag manager): visitors first see the original, then it suddenly switches to the new version.' },
+      { name: 'stable', text: 'The script waits until the website has fully woken up, then makes its change. Nothing breaks, but visitors see the original for the whole wake-up time. The slower the device, the longer the flicker.' },
       { name: 're-apply', text: 'When the website undoes a change, the script puts it back, like real A/B tools do. This causes the back-and-forth effect.' },
       { name: 'anti-flicker', text: 'Hides the whole page until the script has made its changes. No flicker, but visitors stare at a blank page meanwhile.' },
     ],

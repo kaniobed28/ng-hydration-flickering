@@ -14,5 +14,12 @@ function slowDeviceDelay(): number {
 
 setTimeout(() => {
   bootstrapApplication(App, appConfig)
+    .then((appRef) => appRef.whenStable())
+    .then(() => {
+      // Tell scripts outside Angular that hydration is done and the app is stable,
+      // like a production site that holds its A/B tool until then (fk_timing=stable).
+      (window as unknown as { __ngStableAt?: number }).__ngStableAt = performance.now();
+      window.dispatchEvent(new Event('ng-stable'));
+    })
     .catch((err) => console.error(err));
 }, slowDeviceDelay());

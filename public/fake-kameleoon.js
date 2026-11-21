@@ -10,8 +10,13 @@
  *                           server: the SDK in server.ts picks the variant and Angular renders
  *                           it; this script changes nothing and only reports later changes
  *   fk_variant=A|B          force a variant (default: bucketed from the fk_visitor cookie)
- *   fk_timing=early|late    early: edit the HTML before Angular hydrates
+ *   fk_timing=early|late|stable
+ *                           early: edit the HTML before Angular hydrates
  *                           late: edit it fk_delay ms after load, like a slow script
+ *                           stable: wait until Angular has hydrated and is stable
+ *                           (ApplicationRef.whenStable, signalled by the 'ng-stable'
+ *                           event from src/main.ts), then edit. Avoids hydration
+ *                           errors; the original shows for the whole hydration time.
  *   fk_delay=1000           delay used by late timing
  *   fk_reapply=0|1          re-apply changes Angular reverted (MutationObserver)
  *   fk_reapply_delay=300    how long the reverted (control) state stays visible
@@ -252,6 +257,10 @@
 
   if (serverMode) {
     onParsed(function () { arm('server mode, watching only'); });
+  } else if (settings.timing === 'stable') {
+    var armStable = function () { arm('stable, Angular hydrated at ' + Math.round(window.__ngStableAt) + ' ms'); };
+    if (window.__ngStableAt) armStable();
+    else window.addEventListener('ng-stable', armStable, { once: true });
   } else if (settings.timing === 'late') {
     setTimeout(function () { arm('late, after ' + num('delay') + ' ms'); }, num('delay'));
   } else {
@@ -398,6 +407,7 @@
       ['Variant B', 'variant', 'B', 'The new version being tested'],
       ['early', 'timing', 'early', 'Fast script: changes the page before the website wakes up'],
       ['late', 'timing', 'late', 'Slow script: changes the page after visitors already see the original'],
+      ['stable', 'timing', 'stable', 'Waits until the website has fully woken up (hydrated), then changes the page'],
       ['re-apply', 'reapply', '1', 'Put changes back when the website undoes them'],
       ['anti-flicker', 'antiflicker', '1', 'Hide the page until the script is done'],
     ];
