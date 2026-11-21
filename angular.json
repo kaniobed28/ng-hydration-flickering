@@ -60,7 +60,8 @@
               "allowedHosts": [
                 "localhost",
                 "127.0.0.1",
-                "*.vercel.app"
+                "*.vercel.app",
+                "hydration.mntzonline.com"
               ]
             },
             "ssr": {

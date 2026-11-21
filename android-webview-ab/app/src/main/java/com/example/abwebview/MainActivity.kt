@@ -72,7 +72,12 @@ class MainActivity : Activity() {
         super.onCreate(savedInstanceState)
         setContentView(buildUi())
         setupWebView()
-        logLine("Ready. Pick a page, change toggles, press Load.")
+        // Any change reloads the page straight away.
+        targetGroup.setOnCheckedChangeListener { _, _ -> load() }
+        listOf(jsBox, storageBox, blockBox, uaBox, forceBox).forEach { b ->
+            b.setOnCheckedChangeListener { _, _ -> load() }
+        }
+        load()
     }
 
     // ---------------------------------------------------------------- UI
