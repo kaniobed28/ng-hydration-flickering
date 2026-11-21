@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GrowthBook Test</title>
+<!--
+  A real client-side A/B test using the free, open-source GrowthBook JS SDK.
+  The experiment is defined inline (no GrowthBook account or API key needed).
+
+  What the test needs from the browser, and so what a WebView can take away:
+    - JavaScript                    (SDK + this script)
+    - the SDK from cdn.jsdelivr.net (network)
+    - localStorage or a cookie      (keeps the visitor ID, so the visitor stays in one variant)
+    - a normal browser User-Agent   (targeting rule: in-app WebViews are excluded)
+
+  Result for the Android app: window.__abResult, also shown on the page.
+  URL params: ?gb_timeout=1500 (anti-flicker timeout, ms)
+-->
+<style>
+  :root { --bg:#f6f7f9; --card:#fff; --text:#1d2330; --muted:#5f6878; --line:#dde1e7;
+          --a:#2563eb; --b:#16a34a; --bad:#dc2626; }
+  * { box-sizing: border-box; }
+  body { margin:0; padding:16px; font:16px/1.5 system-ui, sans-serif; background:var(--bg); color:var(--text); }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:20px; max-width:480px; margin:0 auto 16px; }
+  h1 { font-size:20px; margin:0 0 4px; }
+  .muted { color:var(--muted); font-size:14px; }
+  .buy { display:block; width:100%; margin-top:16px; padding:14px; border:0; border-radius:10px;
+         font-size:18px; font-weight:600; color:#fff; background:var(--a); }
+  .buy.discount { background:var(--b); }
+  .price s { color:var(--muted); margin-right:6px; }
+  table { width:100%; border-collapse:collapse; font-size:14px; }
+  td { padding:6px 0; border-bottom:1px solid var(--line); vertical-align:top; }
+  td:first-child { color:var(--muted); width:42%; }
+  .ok { color:var(--b); font-weight:600; } .bad { color:var(--bad); font-weight:600; }
+  /* Anti-flicker: hide the product until the experiment has run (or timed out). */
+  .ab-hide #product { visibility:hidden; }
+</style>
+<script>document.documentElement.className = 'ab-hide';</script>
+</head>
+<body>
+
+<div class="card" id="product">
+  <h1>Cordless Drill RH-22</h1>
+  <div class="muted">18 V, 2 batteries, case included</div>
+  <p class="price" id="price"><strong>$129.00</strong></p>
+  <button class="buy" id="buy">Buy</button>
+</div>
+
+<div class="card">
+  <h1>Experiment: buy-button-test</h1>
+  <noscript><p class="bad">JavaScript is off: GrowthBook cannot run, you see the original (control).</p></noscript>
+  <table id="status">
+    <tr><td>Variant shown</td><td id="s-variant">waiting…</td></tr>
+    <tr><td>GrowthBook SDK</td><td id="s-sdk">loading…</td></tr>
+    <tr><td>Visitor ID</td><td id="s-id">–</td></tr>
+    <tr><td>ID stored in</td><td id="s-store">–</td></tr>
+    <tr><td>In-app WebView (UA)</td><td id="s-ua">–</td></tr>
+    <tr><td>Reason</td><td id="s-reason">–</td></tr>
+  </table>
+  <p class="muted">Control = blue "Buy". Variant = green "Buy now – 20% off".
+    In a normal browser the same visitor always gets the same variant on reload.</p>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  var params = new URLSearchParams(location.search);
+  var TIMEOUT = Number(params.get('gb_timeout') || 1500);
+  var KEY = 'gb_visitor_id';
+  var done = false;
+
+  function $(id) { return document.getElementById(id); }
+  function set(id, text, cls) { var el = $(id); el.textContent = text; el.className = cls || ''; }
+  function reveal() { document.documentElement.className = ''; }
+
+  // --- Visitor ID: localStorage, else cookie, else a new random one every load ---
+  function readCookie(name) {
+    var m = document.cookie.match('(?:^|; )' + name + '=([^;]*)');
+    return m ? decodeURIComponent(m[1]) : null;
+  }
+  function getVisitorId() {
+    try {
+      var id = localStorage.getItem(KEY);
+      if (!id) { id = newId(); localStorage.setItem(KEY, id); }
+      if (localStorage.getItem(KEY) === id) return { id: id, store: 'localStorage' };
+    } catch (e) { /* storage blocked */ }
+    try {
+      var c = readCookie(KEY);
+      if (!c) { c = newId(); document.cookie = KEY + '=' + c + '; path=/; max-age=31536000; SameSite=Lax'; }
+      if (readCookie(KEY) === c) return { id: c, store: 'cookie' };
+    } catch (e) { /* cookies blocked */ }
+    return { id: newId(), store: 'none (new ID every load)' };
+  }
+  function newId() { return Math.random().toString(36).slice(2, 10); }
+
+  var visitor = getVisitorId();
+  // Android WebView adds "; wv)" to its User-Agent.
+  var inWebView = /; wv\)/.test(navigator.userAgent);
+  set('s-id', visitor.id);
+  set('s-store', visitor.store, visitor.store.indexOf('none') === 0 ? 'bad' : 'ok');
+  set('s-ua', inWebView ? 'yes' : 'no');
+
+  function finish(variant, sdk, reason) {
+    if (done) return;
+    done = true;
+    if (variant === 'discount') {
+      $('buy').textContent = 'Buy now – 20% off';
+      $('buy').className = 'buy discount';
+      $('price').innerHTML = '<s>$129.00</s><strong>$103.20</strong>';
+    }
+    set('s-variant', variant === 'discount' ? 'B (discount)' : 'A (control)', variant === 'discount' ? 'ok' : '');
+    set('s-sdk', sdk, sdk === 'loaded' ? 'ok' : 'bad');
+    set('s-reason', reason);
+    reveal();
+    window.__abResult = { variant: variant, sdk: sdk, reason: reason,
+                          visitorId: visitor.id, store: visitor.store, inWebView: inWebView };
+    console.log('AB_RESULT ' + JSON.stringify(window.__abResult));
+  }
+
+  // Anti-flicker timeout: if the SDK never arrives, show the control.
+  setTimeout(function () { finish('control', 'blocked / not loaded', 'SDK did not load within ' + TIMEOUT + ' ms, control shown'); }, TIMEOUT);
+
+  window.__runExperiment = function () {
+    if (!window.growthbook || !window.growthbook.GrowthBook) {
+      finish('control', 'blocked / not loaded', 'SDK script failed to load, control shown');
+      return;
+    }
+    var gb = new window.growthbook.GrowthBook({
+      attributes: { id: visitor.id, inAppWebView: inWebView },
+      features: {
+        'buy-button': {
+          defaultValue: 'control',
+          rules: [{
+            key: 'buy-button-test',
+            // Targeting: only real browsers are in the test. A WebView's UA excludes it.
+            condition: { inAppWebView: false },
+            variations: ['control', 'discount'],
+            weights: [0.5, 0.5],
+            hashAttribute: 'id'
+          }]
+        }
+      },
+      trackingCallback: function (exp, res) {
+        console.log('GrowthBook: ' + exp.key + ' -> variation ' + res.key);
+      }
+    });
+    var r = gb.evalFeature('buy-button');
+    var reason = r.source === 'experiment'
+      ? 'in experiment, bucketed by visitor ID'
+      : (inWebView ? 'excluded by targeting rule (WebView User-Agent)' : 'not in experiment (' + r.source + ')');
+    finish(r.value, 'loaded', reason);
+  };
+})();
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@growthbook/growthbook@1.8.0/dist/bundles/index.min.js"
+        onload="__runExperiment()" onerror="__runExperiment()"></script>
+</body>
+</html>
