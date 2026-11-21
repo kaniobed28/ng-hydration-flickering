@@ -12,6 +12,7 @@ import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.webkit.ConsoleMessage
 import android.webkit.CookieManager
 import android.webkit.WebChromeClient
+import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
 import android.webkit.WebStorage
@@ -192,7 +193,37 @@ class MainActivity : Activity() {
                 logLine("loading $url")
             }
 
+            // Network-level failure of the page itself (not of a script we blocked).
+            override fun onReceivedError(view: WebView, req: WebResourceRequest, error: WebResourceError) {
+                if (!req.isForMainFrame) return
+                val (title, body) = when (error.errorCode) {
+                    ERROR_HOST_LOOKUP, ERROR_CONNECT, ERROR_IO ->
+                        "You're offline" to "We couldn't reach the store. Check your Wi-Fi or mobile data, then try again."
+                    ERROR_TIMEOUT ->
+                        "This is taking too long" to "The store didn't answer in time. Your connection may be slow."
+                    else ->
+                        "Page not available" to "Something went wrong while opening the page."
+                }
+                showError(title, body, "${error.errorCode}: ${error.description}")
+            }
+
+            override fun onReceivedHttpError(view: WebView, req: WebResourceRequest, res: WebResourceResponse) {
+                if (!req.isForMainFrame || res.statusCode < 400) return
+                val (title, body) = if (res.statusCode == 404)
+                    "Page not found" to "This page doesn't exist or has moved."
+                else
+                    "The store is having a problem" to "It's not you, it's us. Please try again in a moment."
+                showError(title, body, "HTTP ${res.statusCode}")
+            }
+
+            // The error page's "Try again" link.
+            override fun shouldOverrideUrlLoading(view: WebView, req: WebResourceRequest): Boolean {
+                if (req.url.scheme == "app" && req.url.host == "retry") { load(); return true }
+                return false
+            }
+
             override fun onPageFinished(view: WebView, url: String) {
+                if (showingError) return
                 logLine("page loaded")
                 // Give the test (and its anti-flicker timeout) time to finish, then read the result.
                 main.postDelayed({
@@ -205,7 +236,39 @@ class MainActivity : Activity() {
 
     private fun currentTarget() = targets[targetGroup.checkedRadioButtonId - 1000]
 
+    private var showingError = false
+
+    /** Replaces the WebView's built-in error page with a friendly one. */
+    private fun showError(title: String, body: String, detail: String) {
+        if (showingError) return
+        showingError = true
+        logLine("ERROR $detail -> showing \"$title\"")
+        val html = """
+            <!doctype html><html><head><meta name="viewport" content="width=device-width, initial-scale=1">
+            <style>
+              body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;
+                   font:16px/1.5 system-ui,sans-serif;background:#f6f7f9;color:#1d2330;padding:24px;box-sizing:border-box}
+              .box{max-width:360px;text-align:center}
+              .icon{font-size:48px;margin-bottom:8px}
+              h1{font-size:22px;margin:0 0 8px} p{color:#5f6878;margin:0 0 24px}
+              a{display:inline-block;padding:12px 28px;border-radius:10px;background:#2563eb;color:#fff;
+                text-decoration:none;font-weight:600}
+              small{display:block;margin-top:24px;color:#9aa1ad;font-size:12px}
+            </style></head><body><div class="box">
+              <div class="icon">&#9888;</div>
+              <h1>${esc(title)}</h1>
+              <p>${esc(body)}</p>
+              <a href="app://retry">Try again</a>
+              <small>${esc(detail)}</small>
+            </div></body></html>
+        """.trimIndent()
+        webView.loadDataWithBaseURL(null, html, "text/html", "utf-8", null)
+    }
+
+    private fun esc(s: String) = s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+
     private fun load() {
+        showingError = false
         val s = webView.settings
         s.javaScriptEnabled = jsBox.isChecked
         s.domStorageEnabled = storageBox.isChecked
