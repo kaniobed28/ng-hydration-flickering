@@ -1,0 +1,890 @@
+[
+  {
+    "experiment": "E2",
+    "profile": "desktop",
+    "config": "0",
+    "runs": 20,
+    "flicker_ms": {
+      "median": 0,
+      "q1": 0,
+      "q3": 0
+    },
+    "flicker_rate": 0,
+    "switches": {
+      "median": 0,
+      "q1": 0,
+      "q3": 0
+    },
+    "fcp_ms": {
+      "median": 194,
+      "q1": 175,
+      "q3": 201
+    },
+    "lcp_ms": {
+      "median": 194,
+      "q1": 175,
+      "q3": 201
+    },
+    "cls": {
+      "median": 0,
+      "q1": 0,
+      "q3": 0
+    },
+    "runs_with_errors": 0,
+    "error_sample": "",
+    "final_state": {
+      "A": 20
+    }
+  },
+  {
+    "experiment": "E2",
+    "profile": "desktop",
+    "config": "A1",
+    "runs": 20,
+    "flicker_ms": {
+      "median": 0,
+      "q1": 0,
+      "q3": 7.25
+    },
+    "flicker_rate": 0.35,
+    "switches": {
+      "median": 2,
+      "q1": 2,
+      "q3": 3
+    },
+    "fcp_ms": {
+      "median": 178,
+      "q1": 156,
+      "q3": 192
+    },
+    "lcp_ms": {
+      "median": 178,
+      "q1": 156,
+      "q3": 192
+    },
+    "cls": {
+      "median": 0.005,
+      "q1": 0.004575,
+      "q3": 0.005
+    },
+    "runs_with_errors": 0,
+    "error_sample": "",
+    "final_state": {
+      "B": 20
+    }
+  },
+  {
+    "experiment": "E2",
+    "profile": "desktop",
+    "config": "A2",
+    "runs": 20,
+    "flicker_ms": {
+      "median": 74,
+      "q1": 46,
+      "q3": 78
+    },
+    "flicker_rate": 1,
+    "switches": {
+      "median": 1,
+      "q1": 1,
+      "q3": 1
+    },
+    "fcp_ms": {
+      "median": 156,
+      "q1": 148,
+      "q3": 192
+    },
+    "lcp_ms": {
+      "median": 156,
+      "q1": 148,
+      "q3": 192
+    },
+    "cls": {
+      "median": 0.0017,
+      "q1": 0.0017,
+      "q3": 0.0017
+    },
+    "runs_with_errors": 0,
+    "error_sample": "",
+    "final_state": {
+      "B": 20
+    }
+  },
+  {
+    "experiment": "E2",
+    "profile": "desktop",
+    "config": "B",
+    "runs": 20,
+    "flicker_ms": {
+      "median": 0,
+      "q1": 0,
+      "q3": 0
+    },
+    "flicker_rate": 0,
+    "switches": {
+      "median": 0,
+      "q1": 0,
+      "q3": 0
+    },
+    "fcp_ms": {
+      "median": 254,
+      "q1": 248,
+      "q3": 261
+    },
+    "lcp_ms": {
+      "median": 254,
+      "q1": 248,
+      "q3": 261
+    },
+    "cls": {
+      "median": 0,
+      "q1": 0,
+      "q3": 0
+    },
+    "runs_with_errors": 0,
+    "error_sample": "",
+    "final_state": {
+      "B": 20
+    }
+  },
+  {
+    "experiment": "E2",
+    "profile": "desktop",
+    "config": "D",
+    "runs": 20,
+    "flicker_ms": {
+      "median": 282,
+      "q1": 252.75,
+      "q3": 287.5
+    },
+    "flicker_rate": 1,
+    "switches": {
+      "median": 1,
+      "q1": 1,
+      "q3": 1
+    },
+    "fcp_ms": {
+      "median": 162,
+      "q1": 152,
+      "q3": 189
+    },
+    "lcp_ms": {
+      "median": 162,
+      "q1": 152,
+      "q3": 189
+    },
+    "cls": {
+      "median": 0.0017,
+      "q1": 0.0017,
+      "q3": 0.0017
+    },
+    "runs_with_errors": 0,
+    "error_sample": "",
+    "final_state": {
+      "B": 20
+    }
+  },
+  {
+    "experiment": "E2",
+    "profile": "desktop",
+    "config": "E",
+    "runs": 20,
+    "flicker_ms": {
+      "median": 0,
+      "q1": 0,
+      "q3": 0
+    },
+    "flicker_rate": 0,
+    "switches": {
+      "median": 0,
+      "q1": 0,
+      "q3": 0
+    },
+    "fcp_ms": {
+      "median": 172,
+      "q1": 159,
+      "q3": 193
+    },
+    "lcp_ms": {
+      "median": 172,
+      "q1": 159,
+      "q3": 193
+    },
+    "cls": {
+      "median": 0,
+      "q1": 0,
+      "q3": 0
+    },
+    "runs_with_errors": 0,
+    "error_sample": "",
+    "final_state": {
+      "B": 20
+    }
+  },
+  {
+    "experiment": "E2",
+    "profile": "mobile",
+    "config": "0",
+    "runs": 20,
+    "flicker_ms": {
+      "median": 0,
+      "q1": 0,
+      "q3": 0
+    },
+    "flicker_rate": 0,
+    "switches": {
+      "median": 0,
+      "q1": 0,
+      "q3": 0
+    },
+    "fcp_ms": {
+      "median": 708,
+      "q1": 634,
+      "q3": 766
+    },
+    "lcp_ms": {
+      "median": 740,
+      "q1": 679,
+      "q3": 810
+    },
+    "cls": {
+      "median": 0,
+      "q1": 0,
+      "q3": 0
+    },
+    "runs_with_errors": 0,
+    "error_sample": "",
+    "final_state": {
+      "A": 20
+    }
+  },
+  {
+    "experiment": "E2",
+    "profile": "mobile",
+    "config": "A1",
+    "runs": 20,
+    "flicker_ms": {
+      "median": 157.5,
+      "q1": 0,
+      "q3": 303.25
+    },
+    "flicker_rate": 0.65,
+    "switches": {
+      "median": 3,
+      "q1": 2,
+      "q3": 3
+    },
+    "fcp_ms": {
+      "median": 664,
+      "q1": 632,
+      "q3": 738
+    },
+    "lcp_ms": {
+      "median": 716,
+      "q1": 650,
+      "q3": 791
+    },
+    "cls": {
+      "median": 0.005,
+      "q1": 0.0033,
+      "q3": 0.005
+    },
+    "runs_with_errors": 0,
+    "error_sample": "",
+    "final_state": {
+      "B": 20
+    }
+  },
+  {
+    "experiment": "E2",
+    "profile": "mobile",
+    "config": "A2",
+    "runs": 20,
+    "flicker_ms": {
+      "median": 638.5,
+      "q1": 610.25,
+      "q3": 655.75
+    },
+    "flicker_rate": 1,
+    "switches": {
+      "median": 1,
+      "q1": 1,
+      "q3": 1
+    },
+    "fcp_ms": {
+      "median": 616,
+      "q1": 604,
+      "q3": 633
+    },
+    "lcp_ms": {
+      "median": 616,
+      "q1": 604,
+      "q3": 633
+    },
+    "cls": {
+      "median": 0.0017,
+      "q1": 0.0017,
+      "q3": 0.0017
+    },
+    "runs_with_errors": 0,
+    "error_sample": "",
+    "final_state": {
+      "B": 20
+    }
+  },
+  {
+    "experiment": "E2",
+    "profile": "mobile",
+    "config": "B",
+    "runs": 20,
+    "flicker_ms": {
+      "median": 0,
+      "q1": 0,
+      "q3": 0
+    },
+    "flicker_rate": 0,
+    "switches": {
+      "median": 0,
+      "q1": 0,
+      "q3": 0
+    },
+    "fcp_ms": {
+      "median": 1268,
+      "q1": 1230,
+      "q3": 1304
+    },
+    "lcp_ms": {
+      "median": 1268,
+      "q1": 1230,
+      "q3": 1304
+    },
+    "cls": {
+      "median": 0,
+      "q1": 0,
+      "q3": 0
+    },
+    "runs_with_errors": 0,
+    "error_sample": "",
+    "final_state": {
+      "B": 20
+    }
+  },
+  {
+    "experiment": "E2",
+    "profile": "mobile",
+    "config": "D",
+    "runs": 20,
+    "flicker_ms": {
+      "median": 840.5,
+      "q1": 827.25,
+      "q3": 890
+    },
+    "flicker_rate": 1,
+    "switches": {
+      "median": 1,
+      "q1": 1,
+      "q3": 1
+    },
+    "fcp_ms": {
+      "median": 604,
+      "q1": 592,
+      "q3": 621
+    },
+    "lcp_ms": {
+      "median": 604,
+      "q1": 592,
+      "q3": 621
+    },
+    "cls": {
+      "median": 0.0017,
+      "q1": 0.0017,
+      "q3": 0.0017
+    },
+    "runs_with_errors": 0,
+    "error_sample": "",
+    "final_state": {
+      "B": 20
+    }
+  },
+  {
+    "experiment": "E2",
+    "profile": "mobile",
+    "config": "E",
+    "runs": 20,
+    "flicker_ms": {
+      "median": 0,
+      "q1": 0,
+      "q3": 0
+    },
+    "flicker_rate": 0,
+    "switches": {
+      "median": 0,
+      "q1": 0,
+      "q3": 0
+    },
+    "fcp_ms": {
+      "median": 628,
+      "q1": 614,
+      "q3": 637
+    },
+    "lcp_ms": {
+      "median": 628,
+      "q1": 619,
+      "q3": 641
+    },
+    "cls": {
+      "median": 0,
+      "q1": 0,
+      "q3": 0
+    },
+    "runs_with_errors": 0,
+    "error_sample": "",
+    "final_state": {
+      "B": 20
+    }
+  },
+  {
+    "experiment": "E3E4",
+    "profile": "desktop",
+    "config": "0",
+    "runs": 20,
+    "flicker_ms": {
+      "median": 0,
+      "q1": 0,
+      "q3": 0
+    },
+    "flicker_rate": 0,
+    "switches": {
+      "median": 0,
+      "q1": 0,
+      "q3": 0
+    },
+    "fcp_ms": {
+      "median": 170,
+      "q1": 164,
+      "q3": 189
+    },
+    "lcp_ms": {
+      "median": 170,
+      "q1": 164,
+      "q3": 189
+    },
+    "cls": {
+      "median": 0,
+      "q1": 0,
+      "q3": 0
+    },
+    "runs_with_errors": 0,
+    "error_sample": "",
+    "final_state": {
+      "A": 20
+    }
+  },
+  {
+    "experiment": "E3E4",
+    "profile": "desktop",
+    "config": "A1",
+    "runs": 20,
+    "flicker_ms": {
+      "median": 0,
+      "q1": 0,
+      "q3": 0
+    },
+    "flicker_rate": 0.1,
+    "switches": {
+      "median": 1,
+      "q1": 1,
+      "q3": 1
+    },
+    "fcp_ms": {
+      "median": 176,
+      "q1": 163,
+      "q3": 202
+    },
+    "lcp_ms": {
+      "median": 176,
+      "q1": 163,
+      "q3": 202
+    },
+    "cls": {
+      "median": 0,
+      "q1": 0,
+      "q3": 0
+    },
+    "runs_with_errors": 20,
+    "error_sample": "ERROR TypeError: e.hasAttribute is not a function     at am (http://localhost:4126/main-ZWB4U73Y.js:4:30254)     at Z0 (",
+    "final_state": {
+      "broken": 20
+    }
+  },
+  {
+    "experiment": "E3E4",
+    "profile": "desktop",
+    "config": "A2",
+    "runs": 20,
+    "flicker_ms": {
+      "median": 52,
+      "q1": 33,
+      "q3": 76.25
+    },
+    "flicker_rate": 1,
+    "switches": {
+      "median": 1,
+      "q1": 1,
+      "q3": 1
+    },
+    "fcp_ms": {
+      "median": 174,
+      "q1": 151,
+      "q3": 192
+    },
+    "lcp_ms": {
+      "median": 174,
+      "q1": 151,
+      "q3": 192
+    },
+    "cls": {
+      "median": 0,
+      "q1": 0,
+      "q3": 0
+    },
+    "runs_with_errors": 0,
+    "error_sample": "",
+    "final_state": {
+      "B": 20
+    }
+  },
+  {
+    "experiment": "E3E4",
+    "profile": "desktop",
+    "config": "C",
+    "runs": 20,
+    "flicker_ms": {
+      "median": 0,
+      "q1": 0,
+      "q3": 0
+    },
+    "flicker_rate": 0,
+    "switches": {
+      "median": 2,
+      "q1": 2,
+      "q3": 2
+    },
+    "fcp_ms": {
+      "median": 186,
+      "q1": 164,
+      "q3": 193
+    },
+    "lcp_ms": {
+      "median": 186,
+      "q1": 164,
+      "q3": 193
+    },
+    "cls": {
+      "median": 0,
+      "q1": 0,
+      "q3": 0
+    },
+    "runs_with_errors": 0,
+    "error_sample": "",
+    "final_state": {
+      "B": 20
+    }
+  },
+  {
+    "experiment": "E3E4",
+    "profile": "desktop",
+    "config": "D",
+    "runs": 20,
+    "flicker_ms": {
+      "median": 266,
+      "q1": 249,
+      "q3": 281
+    },
+    "flicker_rate": 1,
+    "switches": {
+      "median": 1,
+      "q1": 1,
+      "q3": 1
+    },
+    "fcp_ms": {
+      "median": 168,
+      "q1": 160,
+      "q3": 188
+    },
+    "lcp_ms": {
+      "median": 168,
+      "q1": 160,
+      "q3": 188
+    },
+    "cls": {
+      "median": 0,
+      "q1": 0,
+      "q3": 0
+    },
+    "runs_with_errors": 0,
+    "error_sample": "",
+    "final_state": {
+      "B": 20
+    }
+  },
+  {
+    "experiment": "E3E4",
+    "profile": "desktop",
+    "config": "E",
+    "runs": 20,
+    "flicker_ms": {
+      "median": 0,
+      "q1": 0,
+      "q3": 0
+    },
+    "flicker_rate": 0,
+    "switches": {
+      "median": 0,
+      "q1": 0,
+      "q3": 0
+    },
+    "fcp_ms": {
+      "median": 156,
+      "q1": 152,
+      "q3": 164
+    },
+    "lcp_ms": {
+      "median": 156,
+      "q1": 152,
+      "q3": 164
+    },
+    "cls": {
+      "median": 0,
+      "q1": 0,
+      "q3": 0
+    },
+    "runs_with_errors": 0,
+    "error_sample": "",
+    "final_state": {
+      "B": 20
+    }
+  },
+  {
+    "experiment": "E3E4",
+    "profile": "mobile",
+    "config": "0",
+    "runs": 20,
+    "flicker_ms": {
+      "median": 0,
+      "q1": 0,
+      "q3": 0
+    },
+    "flicker_rate": 0,
+    "switches": {
+      "median": 0,
+      "q1": 0,
+      "q3": 0
+    },
+    "fcp_ms": {
+      "median": 646,
+      "q1": 528,
+      "q3": 677
+    },
+    "lcp_ms": {
+      "median": 646,
+      "q1": 528,
+      "q3": 677
+    },
+    "cls": {
+      "median": 0,
+      "q1": 0,
+      "q3": 0
+    },
+    "runs_with_errors": 0,
+    "error_sample": "",
+    "final_state": {
+      "A": 20
+    }
+  },
+  {
+    "experiment": "E3E4",
+    "profile": "mobile",
+    "config": "A1",
+    "runs": 20,
+    "flicker_ms": {
+      "median": 178.5,
+      "q1": 37.5,
+      "q3": 199.75
+    },
+    "flicker_rate": 0.95,
+    "switches": {
+      "median": 2,
+      "q1": 2,
+      "q3": 2
+    },
+    "fcp_ms": {
+      "median": 616,
+      "q1": 602,
+      "q3": 656
+    },
+    "lcp_ms": {
+      "median": 628,
+      "q1": 604,
+      "q3": 656
+    },
+    "cls": {
+      "median": 0,
+      "q1": 0,
+      "q3": 0
+    },
+    "runs_with_errors": 20,
+    "error_sample": "ERROR TypeError: e.hasAttribute is not a function     at am (http://localhost:4126/main-ZWB4U73Y.js:4:30254)     at Z0 (",
+    "final_state": {
+      "broken": 20
+    }
+  },
+  {
+    "experiment": "E3E4",
+    "profile": "mobile",
+    "config": "A2",
+    "runs": 20,
+    "flicker_ms": {
+      "median": 746.5,
+      "q1": 638.5,
+      "q3": 819.25
+    },
+    "flicker_rate": 1,
+    "switches": {
+      "median": 1,
+      "q1": 1,
+      "q3": 1
+    },
+    "fcp_ms": {
+      "median": 570,
+      "q1": 505,
+      "q3": 643
+    },
+    "lcp_ms": {
+      "median": 570,
+      "q1": 505,
+      "q3": 643
+    },
+    "cls": {
+      "median": 0,
+      "q1": 0,
+      "q3": 0
+    },
+    "runs_with_errors": 0,
+    "error_sample": "",
+    "final_state": {
+      "B": 20
+    }
+  },
+  {
+    "experiment": "E3E4",
+    "profile": "mobile",
+    "config": "C",
+    "runs": 20,
+    "flicker_ms": {
+      "median": 127.5,
+      "q1": 13.5,
+      "q3": 237.25
+    },
+    "flicker_rate": 0.8,
+    "switches": {
+      "median": 3,
+      "q1": 3,
+      "q3": 3
+    },
+    "fcp_ms": {
+      "median": 602,
+      "q1": 499,
+      "q3": 640
+    },
+    "lcp_ms": {
+      "median": 616,
+      "q1": 513,
+      "q3": 666
+    },
+    "cls": {
+      "median": 0,
+      "q1": 0,
+      "q3": 0
+    },
+    "runs_with_errors": 0,
+    "error_sample": "",
+    "final_state": {
+      "B": 20
+    }
+  },
+  {
+    "experiment": "E3E4",
+    "profile": "mobile",
+    "config": "D",
+    "runs": 20,
+    "flicker_ms": {
+      "median": 878.5,
+      "q1": 857,
+      "q3": 977.25
+    },
+    "flicker_rate": 1,
+    "switches": {
+      "median": 1,
+      "q1": 1,
+      "q3": 1
+    },
+    "fcp_ms": {
+      "median": 602,
+      "q1": 525,
+      "q3": 649
+    },
+    "lcp_ms": {
+      "median": 610,
+      "q1": 567,
+      "q3": 657
+    },
+    "cls": {
+      "median": 0,
+      "q1": 0,
+      "q3": 0
+    },
+    "runs_with_errors": 0,
+    "error_sample": "",
+    "final_state": {
+      "B": 20
+    }
+  },
+  {
+    "experiment": "E3E4",
+    "profile": "mobile",
+    "config": "E",
+    "runs": 20,
+    "flicker_ms": {
+      "median": 0,
+      "q1": 0,
+      "q3": 0
+    },
+    "flicker_rate": 0,
+    "switches": {
+      "median": 0,
+      "q1": 0,
+      "q3": 0
+    },
+    "fcp_ms": {
+      "median": 634,
+      "q1": 487,
+      "q3": 661
+    },
+    "lcp_ms": {
+      "median": 640,
+      "q1": 500,
+      "q3": 679
+    },
+    "cls": {
+      "median": 0,
+      "q1": 0,
+      "q3": 0
+    },
+    "runs_with_errors": 0,
+    "error_sample": "",
+    "final_state": {
+      "B": 20
+    }
+  }
+]
